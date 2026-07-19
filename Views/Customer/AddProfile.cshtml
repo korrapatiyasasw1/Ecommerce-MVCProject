@@ -1,0 +1,27 @@
+﻿<h1>Adddetails</h1>
+@model Customer
+<form asp-action="AddProfile" asp-controller="Customer" method="post">
+    <div class="mb-lg-2">
+<label asp-for="FirstName" class="form-label">FirstName</label>
+<input asp-for="FirstName" class="frm-control"/>
+</div>
+    <div class="mb-lg-2">
+        <label asp-for="LastName" class="from-label">LastName</label>
+        <input asp-for="LastName" class="from-control" />
+    </div>
+    <div class="mb-lg-2">
+        <label asp-for="Email" class="from-label">Email</label>
+        <input asp-for="Email" class="from-control" />
+    </div>
+    <div class="mb-lg-2">
+        <label asp-for="PhoneNumber" class="from-label">PhoneNumber</label>
+        <input asp-for="PhoneNumber" class="from-control" />
+    </div>
+    <div class="mb-lg-2">
+        <label asp-for="Address" class="from-label">Address</label>
+        <input asp-for="Address" class="from-control" />
+    </div>
+    
+
+<button type="submit" class="btn btn-primary">AddCusomter</button>
+</form>

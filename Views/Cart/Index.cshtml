@@ -1,0 +1,44 @@
+﻿@model MVCDotnetCore.Models.ViewModel;
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Product ID</th>
+            <th>Product Name</th>
+            <th>Quantity</th>
+            <th>Unit Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.CartItems)
+        {
+                <tr>
+                    <td>@item.ProductId</td>
+                    <td>@item.Product.Name</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.UnitPrice</td>
+                    <td>
+                    <form  asp-controller="Cart" asp-action="IncreaseQuantity"  method="post">
+                        <input type="hidden" name="Itemid" value="@item.Id" />
+                        <button type="Submit">AddQuantity</button>
+                    </form>
+                    </td>
+                    <td>
+                     <form  asp-controller="Cart" asp-action="DeceraseQuantity"  method="post">
+                        <input type="hidden" name="Itemid" value="@item.Id"/>
+                        <button type="Submit">DeceraseQuantity</button>
+                    </form>
+                    </td>
+                </tr>
+        }
+      <tr>
+            <h1>@Model.GrandTotal</h1>
+      </tr>
+    </tbody>
+</table>
+  <form asp-controller="Cart" asp-action="Grandtotal" method ="get">
+            <h1>Grandtotal</h1>
+        </form>
+<form asp-controller="Order" asp-action="CreateOrder" method="get">
+<button type="submit">ChecKOut</button>
+</form>

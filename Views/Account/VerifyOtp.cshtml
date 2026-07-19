@@ -1,0 +1,50 @@
+﻿@model MVCDotnetCore.Models.VerifyOtp
+
+@{
+    ViewData["Title"] = "Verify OTP";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+
+            <div class="card shadow">
+                <div class="card-header text-center">
+                    <h3>Verify OTP</h3>
+                </div>
+
+                <div class="card-body">
+
+                    <form asp-action="VerifyOtp" asp-controller="Account" method="post">
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label"></label>
+                            <input asp-for="Email" class="form-control" placeholder="Enter Email" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="OtpCode" class="form-label"></label>
+                            <input asp-for="OtpCode" class="form-control" placeholder="Enter OTP" />
+                            <span asp-validation-for="OtpCode" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                Verify OTP
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}
