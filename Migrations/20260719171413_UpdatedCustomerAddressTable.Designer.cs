@@ -4,6 +4,7 @@ using MVCDotnetCore.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MVCDotnetCore.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260719171413_UpdatedCustomerAddressTable")]
+    partial class UpdatedCustomerAddressTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -219,9 +222,6 @@ namespace MVCDotnetCore.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CustomerAddressId")
-                        .HasColumnType("int");
-
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
@@ -236,8 +236,6 @@ namespace MVCDotnetCore.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CustomerAddressId");
 
                     b.HasIndex("CustomerId");
 
@@ -413,12 +411,6 @@ namespace MVCDotnetCore.Migrations
 
             modelBuilder.Entity("MVCDotnetCore.Models.Order", b =>
                 {
-                    b.HasOne("MVCDotnetCore.Models.CustomerAddress", "CustomerAddress")
-                        .WithMany()
-                        .HasForeignKey("CustomerAddressId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.HasOne("MVCDotnetCore.Models.Customer", "Customer")
                         .WithMany()
                         .HasForeignKey("CustomerId")
@@ -426,8 +418,6 @@ namespace MVCDotnetCore.Migrations
                         .IsRequired();
 
                     b.Navigation("Customer");
-
-                    b.Navigation("CustomerAddress");
                 });
 
             modelBuilder.Entity("MVCDotnetCore.Models.OrderItem", b =>

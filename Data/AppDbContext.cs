@@ -12,6 +12,12 @@ namespace MVCDotnetCore.Data
                 .HasIndex(e => e.UserId)
                 .IsUnique();
 
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.CustomerAddress)
+                .WithMany()
+                .HasForeignKey(o => o.CustomerAddressId)
+                .OnDelete(DeleteBehavior.NoAction);
+
         }
         public DbSet<Category> Categories { get; set; }
         public DbSet<EmailOtp> EmailOtps { get; set; }
@@ -22,6 +28,7 @@ namespace MVCDotnetCore.Data
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<Order> Order { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<CustomerAddress> CustomerAddresses { get; set; }
 
     }
 }

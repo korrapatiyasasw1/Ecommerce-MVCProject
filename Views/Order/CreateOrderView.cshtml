@@ -1,0 +1,12 @@
+﻿@model Order
+<form asp-action="CreateOrder" asp-controller="Order" method="post">
+    <label asp-for="CustomerAddressId" class-label="from-label">
+    </label>
+    <select asp-for="CustomerAddressId"
+            asp-items="@(new SelectList( ViewBag.CustomerAddress ,"Id","Display"))"
+      class="form-select"      >
+    <option value="">Select CustomerAddress</option>
+    </select>
+
+    <button type="submit">PlaceOrder</button>
+</form>

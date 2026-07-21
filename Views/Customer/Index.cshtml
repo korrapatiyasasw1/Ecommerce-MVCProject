@@ -2,16 +2,7 @@
 
 <div class="container mt-4">
 
-    <a asp-controller="Customer"
-       asp-action="AddProfile"
-       class="btn btn-primary mb-3">
-        Add Customer
-    </a>
-    <a asp-controller="Customer"
-       asp-action="UpdateProfile"
-       class="btn btn-primary mb-3">
-        UpdateCustomer
-    </a>
+    
 
     @if (Model != null)
     {
@@ -37,5 +28,25 @@
             No customer found.
         </div>
     }
+
+</div>
+<div>
+    <a asp-controller="Customer"
+       asp-action="AddProfile"
+       class="btn btn-primary mb-3">
+        Add Customer
+    </a>
+    <a asp-controller="Customer"
+       asp-action="UpdateProfile"
+       class="btn btn-primary mb-3">
+        UpdateCustomer
+    </a>
+    <a asp-controller ="CustomerAddress"
+       asp-action="AddCustomerAddress"
+    class="btn btn-primary mb-3">
+    AddCutsomerAddress
+
+    </a>
+  
 
 </div>

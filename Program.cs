@@ -24,6 +24,7 @@ namespace MVCDotnetCore
             builder.Services.AddScoped<ICartItemService,CartItemService>();
             builder.Services.AddScoped<ICartService,CartService>();
             builder.Services.AddScoped<IOrderService, OrderService>();
+            builder.Services.AddScoped<ICustomerAddressService, CustomerAddressService>();
 
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                  .AddCookie(options =>

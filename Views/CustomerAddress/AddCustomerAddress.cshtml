@@ -1,0 +1,64 @@
+﻿@model MVCDotnetCore.Models.CustomerAddress
+
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h3>Add Customer Address</h3>
+        </div>
+
+        <div class="card-body">
+            <form asp-controller="CustomerAddress" asp-action="AddCustomerAddress" method="post">
+
+
+                <div class="mb-3">
+                    <label asp-for="HouseNo" class="form-label"></label>
+                    <input asp-for="HouseNo" class="form-control" />
+                    <span asp-validation-for="HouseNo" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Street" class="form-label"></label>
+                    <input asp-for="Street" class="form-control" />
+                    <span asp-validation-for="Street" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="City" class="form-label"></label>
+                    <input asp-for="City" class="form-control" />
+                    <span asp-validation-for="City" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="State" class="form-label"></label>
+                    <input asp-for="State" class="form-control" />
+                    <span asp-validation-for="State" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="PostalCode" class="form-label"></label>
+                    <input asp-for="PostalCode" class="form-control" />
+                    <span asp-validation-for="PostalCode" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Country" class="form-label"></label>
+                    <input asp-for="Country" class="form-control" />
+                    <span asp-validation-for="Country" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-success">
+                    Save Address
+                </button>
+
+
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

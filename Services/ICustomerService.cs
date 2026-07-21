@@ -4,7 +4,6 @@ namespace MVCDotnetCore.Services
 {
     public interface ICustomerService
     {
-       // Task<List<Customer>> GetAllCustomers();
 
        Task<Customer?> GetCustomerById(int userid);
 

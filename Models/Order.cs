@@ -8,7 +8,9 @@
         public decimal TotalPrice { get; set; }
         public int CustomerId { get; set; }
 
-        public Customer? Customer { get; set; } 
+        public Customer? Customer { get; set; }
+        public int CustomerAddressId { get; set; }
+        public CustomerAddress? CustomerAddress { get; set; }
         public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>(); 
     }
 }

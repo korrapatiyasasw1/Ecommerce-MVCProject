@@ -54,7 +54,6 @@ namespace MVCDotnetCore.Controllers
             }
             return View(product);
 
-
         }
         [HttpGet]
         public async Task<IActionResult> UpdateProduct(int id)

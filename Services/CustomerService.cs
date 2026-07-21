@@ -31,7 +31,6 @@ namespace MVCDotnetCore.Services
         public async Task AddCustomer(Customer customer ,int userId)
         {
             customer.UserId = userId;
-   
           _context.Customers.Add(customer);
             await _context.SaveChangesAsync();
         }
