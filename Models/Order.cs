@@ -10,6 +10,7 @@
 
         public Customer? Customer { get; set; }
         public int CustomerAddressId { get; set; }
+        public string OrderStatus { get; set; }
         public CustomerAddress? CustomerAddress { get; set; }
         public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>(); 
     }

@@ -1,27 +1,54 @@
 ﻿@model RegisterDTO
 
-<form asp-action="Register" method="post">
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
 
-    <div>
-        <label>Name</label>
-        <input asp-for="Name" />
+            <div class="card shadow">
+                <div class="card-header  text-center">
+                    <h3>Register</h3>
+                </div>
+
+                <div class="card-body">
+
+                    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                    <form asp-action="Register" method="post">
+
+                        <div class="mb-3">
+                            <label asp-for="Name" class="form-label"></label>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label"></label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Password" class="form-label"></label>
+                            <input asp-for="Password" type="password" class="form-control" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                Register
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
     </div>
+</div>
 
-    <div>
-        <label>Email</label>
-        <input asp-for="Email" />
-    </div>
-
-    <div>
-        <label>Password</label>
-        <input asp-for="Password" type="password" />
-    </div>
-    <div>
-        <label>Role</label>
-        <input asp-for="Role" />
-    </div>
-
-
-    <button type="submit">Register</button>
-
-</form>
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

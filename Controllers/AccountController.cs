@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using MVCDotnetCore.Models;
 using MVCDotnetCore.Services;
@@ -15,6 +14,7 @@ namespace MVCDotnetCore.Controllers
             return View();
         }
         private readonly IAccountService AccountService;
+        private readonly PDFService PDFService;
 
         public AccountController(IAccountService _AccountService)
         {
@@ -25,15 +25,24 @@ namespace MVCDotnetCore.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> Register(RegisterDTO model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                await AccountService.Register(model);
-                return RedirectToAction("VerifyOtp");
-            }
+                if (ModelState.IsValid)
+                {
+                    await AccountService.Register(model);
+                    return RedirectToAction("VerifyOtp");
+                }
                 return View(model);
+            }
+            catch(Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View(model);
+            }
             
         }
         [HttpGet]
@@ -44,12 +53,20 @@ namespace MVCDotnetCore.Controllers
         [HttpPost]
         public async Task<IActionResult> VerifyOtp(VerifyOtp model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                await AccountService.VerifyOtp(model);
-                return View();
+                if (ModelState.IsValid)
+                {
+                    await AccountService.VerifyOtp(model);
+                    return RedirectToAction("Login","Account");
+                }
+                return View(model);
             }
-            return View(model);
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View(model);
+            }
 
 
         }
@@ -61,7 +78,18 @@ namespace MVCDotnetCore.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginDTO model)
         {
+
+            try
+            {
+                await AccountService.Login(model);
+            }
+            catch(Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View(model);
+            }
             var user = await AccountService.Login(model);
+
 
             var claims = new List<Claim>
              {
@@ -79,6 +107,16 @@ namespace MVCDotnetCore.Controllers
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 principal);
+            foreach (var claim in principal.Claims)
+            {
+                Console.WriteLine($"{claim.Type} : {claim.Value}");
+            }
+           
+           
+            if(ModelState.IsValid)
+            {
+                return RedirectToAction("Index", "Product");
+            }
 
             return RedirectToAction("Index", "Home");
         }

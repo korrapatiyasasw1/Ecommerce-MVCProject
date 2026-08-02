@@ -1,44 +1,72 @@
 ﻿@model MVCDotnetCore.Models.ViewModel;
-
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+@if (Model != null)
+{
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
-            <th>Product ID</th>
+            <th>Product Image</th>
             <th>Product Name</th>
             <th>Quantity</th>
             <th>Unit Price</th>
         </tr>
     </thead>
     <tbody>
+       
         @foreach (var item in Model.CartItems)
         {
+            
                 <tr>
-                    <td>@item.ProductId</td>
+                <td>
+                    <img src="@item.Product.ImageUrl"
+                         width="80"
+                         height="80"
+                         style="object-fit:contain;" />
+                </td>
                     <td>@item.Product.Name</td>
                     <td>@item.Quantity</td>
                     <td>@item.UnitPrice</td>
                     <td>
+                        
                     <form  asp-controller="Cart" asp-action="IncreaseQuantity"  method="post">
                         <input type="hidden" name="Itemid" value="@item.Id" />
-                        <button type="Submit">AddQuantity</button>
+                        <button type="Submit" class="btn btn-success">+</button>
                     </form>
                     </td>
                     <td>
                      <form  asp-controller="Cart" asp-action="DeceraseQuantity"  method="post">
                         <input type="hidden" name="Itemid" value="@item.Id"/>
-                        <button type="Submit">DeceraseQuantity</button>
+                        <button type="Submit" class="btn btn-warning">-</button>
                     </form>
                     </td>
+                <td>
+                    <form asp-controller="Cart" asp-action="RemoveItem" method="post">
+                        <input type="hidden" name="itemIid" value="@item.Id" />
+                        <button type="Submit" class="btn btn-danger">Remove</button>
+                    </form>
+                </td>
                 </tr>
         }
-      <tr>
-            <h1>@Model.GrandTotal</h1>
-      </tr>
+      
     </tbody>
 </table>
-  <form asp-controller="Cart" asp-action="Grandtotal" method ="get">
-            <h1>Grandtotal</h1>
-        </form>
-<a asp-controller="Order" asp-action="CreateOrderView" class="btn btn-primary">
+        
+
+<div class="text-end mt-3">
+    <h3>Grand Total: ₹@Model.GrandTotal</h3>
+</div>  
+<a asp-controller="Order" asp-action="CreateOrderView" 
+class="btn btn-primary">
 ChecKOut
-</a>
+    </a>
+}
+else
+{
+    <h3>Cart is empty</h3>
+}
+

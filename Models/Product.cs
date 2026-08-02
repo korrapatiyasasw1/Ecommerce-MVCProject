@@ -11,14 +11,16 @@ namespace MVCDotnetCore.Models
         public string Description { get; set; }
         public decimal Price { get; set; }
         public int stock { get; set; }
-        public string Brand { get; set; }
-        public string ImageUrl { get; set; }
+        public string? ImageUrl { get; set; }
+
         [NotMapped]
         public IFormFile? ImageFile { get; set; }
 
         public bool IsAcitve { get; set; }
         public int CategoryId { get; set; }
         public Category? Category { get; set; }
+        public int? BrandId { get; set; }
+        public Brand? Brand { get; set; }
 
     }
 }

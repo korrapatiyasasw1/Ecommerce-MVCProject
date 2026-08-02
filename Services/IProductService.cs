@@ -14,6 +14,7 @@ namespace MVCDotnetCore.Services
         Task DeleteProduct(int id);
         Task<List<Product>> Search(string ProductName);
         Task<List<Product>> SearchByCategoryName(string CategoryName);
+      //  Task<List<Product>> OrderByPrice(int MinPrice,int MaxPrice);
 
     }
 }

@@ -10,6 +10,8 @@ namespace MVCDotnetCore.Services
         Task<ViewModel> GetCartItem(int UserId);
         Task<CartItem> AddQuantity(int UserId, int itemId);
        Task<CartItem> DeceraseQuantity(int UserId,  int itemId);
+        Task<List<CartItem>> RemoveItem(int UserId, int itemIid);
+
 
     }
 }

@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using MVCDotnetCore.Migrations;
 using MVCDotnetCore.Models;
 using MVCDotnetCore.Services;
 using System.Diagnostics;
@@ -16,6 +17,8 @@ namespace MVCDotnetCore.Controllers
             CartService = _CartService;
 
         }
+        [Authorize(Roles = "Customer")]
+
 
         [HttpGet]
         public async Task<IActionResult> IndexCart()
@@ -26,44 +29,99 @@ User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
             return View(cart);
         }
+        [Authorize(Roles = "Customer")]
+
         [HttpGet]
         public async Task<IActionResult> Index()
         {
             int UserId = int.Parse(
-User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-            var cartItem = await CartService.GetCartItem(UserId);
-            if(cartItem == null)
-            {
-                return View("Empty","Cart");
-            }
-            return View(cartItem);
+         User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            
+
+                var cartItem = await CartService.GetCartItem(UserId);
+
+                return View(cartItem);
+            
+
+            
+          
         }
+        [Authorize(Roles = "Customer")]
+
         [HttpPost]
         public async Task<IActionResult> AddCustomerCart(int productId)
         {
             Debug.WriteLine($"Product ID: {productId}");
             int UserId = int.Parse(
-User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-            await CartService.AddCart(UserId,productId);
-            return RedirectToAction("Index");
+         User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            try
+            {
+                await CartService.AddCart(UserId,productId);
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = ex.Message;
+
+                return RedirectToAction("Index","Cart");
+            }
         }
+        [Authorize(Roles = "Customer")]
+
         [HttpPost]
         public async Task<IActionResult> IncreaseQuantity(int itemId)
         {
             int UserId = int.Parse(
 User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-             await CartService.AddQuantity(UserId,itemId);
-            return RedirectToAction("Index");
+            try
+            {
+                await CartService.AddQuantity(UserId, itemId);
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+
+                ViewBag.Error = ex.Message;
+                return RedirectToAction("Index");
+            }
 
         }
+        [Authorize(Roles = "Customer")]
+
         [HttpPost]
         public async Task<IActionResult> DeceraseQuantity(int itemId)
         {
             int UserId = int.Parse(
 User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-            await CartService.DeceraseQuantity(UserId, itemId);
-            return RedirectToAction("Index");
+            try
+            {
+                await CartService.DeceraseQuantity(UserId, itemId);
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = ex.Message;
+                return View();
+            }
         }
+        [Authorize(Roles = "Customer")]
+        [HttpPost]
+        public async Task<IActionResult> RemoveItem(int itemIid)
+        {
+                        int UserId = int.Parse(
+               User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            try
+            {
+                await CartService.RemoveItem(UserId, itemIid);
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = ex.Message;
+                return View();
+            }
+        }
+
 
 
 

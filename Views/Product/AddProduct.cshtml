@@ -5,7 +5,8 @@
 <div class="card">
     <div class="card-header text-center">AddProduct</div>
     <div class="card-body">
-                    <form asp-action="AddProduct" asp-controller="Product" method="post" enctype="multipart/form-data">
+                    <form asp-action="AddProduct" asp-controller="Product" 
+                    method="post" enctype="multipart/form-data">
                         
             <div class="mb-3">
         <label  asp-for="Name" class="form-label" >Name</label>
@@ -26,25 +27,32 @@
                             <label asp-for="stock" class="form-label">Stock</label>
                             <input asp-for="stock" class="form-control" />
                     </div>
-                                <div class="mb-3">
-
-                            <label asp-for="Brand" class="form-label">Brand</label>
-                            <input asp-for="Brand" class="form-control" />
-                </div>
-                <div class="mb-3">
-
-                    <label asp-for="ImageUrl" class="form-label">ImageUrl</label>
-                    <input asp-for="ImageUrl" class="form-control" />
-                </div>
+                         
+                
                         <div class="mb-3">
                             <label asp-for="ImageFile" class="form-label"></label>
                             <input asp-for="ImageFile" type="file" class="form-control" />
-                        </div>
-                                    <div class="mb-3">
+                            </div>
+                        <div class="mb-3">
 
                             <label asp-for="CategoryId" class="form-label">CategoryId</label>
-                            <input asp-for="CategoryId" class="form-control" />
-                    </div>
+
+                            <select asp-for="CategoryId"
+                                    asp-items="@(new SelectList(ViewBag.Categories, "Id", "Name"))"
+                                    class="form-select">
+                                <option value="">Select Category</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+
+                            <label asp-for="BrandId" class="form-label">BrandId</label>
+
+                            <select asp-for="BrandId"
+                                    asp-items="@(new SelectList(ViewBag.Brands, "Id", "BrandName"))"
+                                    class="form-select">
+                                <option value="">Select Category</option>
+                            </select>
+                        </div>
                         <div class="mb-3">
 
                             <label asp-for="IsAcitve" class="form-check-label">IsActive</label>

@@ -1,0 +1,61 @@
+﻿@model List<Order>
+
+<h2>All Orders</h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Order Id</th>
+            <th>Order Number</th>
+            <th>Customer</th>
+            <th>Order Date</th>
+            <th>Total Price</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+
+                <td>@item.OrderNumber</td>
+
+                <td>@item.Customer.LastName</td>
+
+                <td>@item.OrderDate.ToString("dd-MM-yyyy")</td>
+
+                <td>₹@item.TotalPrice.ToString("N2")</td>
+                
+                <td>@item.OrderStatus</td>
+                
+
+                <td>
+                    <a asp-controller="Order"
+                       asp-action="GetOrderItemByOrderId"
+                       asp-route-id="@item.Id"
+                       class="btn btn-primary btn-sm">
+                        View
+                    </a>
+
+                    <a asp-controller="Admin"
+                       asp-action="UpdateOrderStatus"
+                       asp-route-id="@item.Id"
+                       class="btn btn-warning btn-sm">
+                        Update Status
+                    </a>
+                    <form asp-controller="Admin" asp-action="SendPDFToUser" method="post">
+                        <input type="hidden" name="orderId" value="@item.Id" />
+                        <button type="submit" 
+                            class="btn btn-danger btn-sm">
+                            SendPDF</button>
+                    </form>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>

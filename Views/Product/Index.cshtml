@@ -3,87 +3,128 @@
 <div class="container mt-4">
 
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Product List</h2>
 
-        <a asp-action="AddProduct"
-           asp-controller="Product"
-           class="btn btn-success">
-            Add Product
-        </a>
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-action="AddProduct"
+               asp-controller="Product"
+               class="btn btn-success">
+                Add Product
+            </a>
+        }
     </div>
-    <div class="row-mb-3">
+
+    <div class="row mb-4">
+
         <div class="col-md-6">
-    <form  asp-action="Search" asp-controller="Product" method="get" class="d-flex gap-2">
-        <input type="text"name="ProductName" />
-        <button type="Submit">Search</button>
-    </form>
-    </div>
-    <div class="col-md-6">
-    <form asp-action="SearchByCategoryName" asp-controller="Product" method="get"
-    class="d-flex gap-2">
-        <select name="CategoryName" class="form-select">
-            @foreach (var item in ViewBag.Categories)
-            {
-                <option value="@item.Name">@item.Name</option>
-            }
-        </select>
+            <form asp-action="Search"
+                  asp-controller="Product"
+                  method="get"
+                  class="d-flex">
 
-        <button type="submit" class="btn btn-primary">
-            Filter
-        </button>
-    </form>
+                <input type="text"
+                       name="ProductName"
+                       class="form-control me-2"
+                       placeholder="Search Product..." />
+
+                <button type="submit"
+                        class="btn btn-primary">
+                    Search
+                </button>
+
+            </form>
+        </div>
+
+        <div class="col-md-6">
+            <form asp-action="SearchByCategoryName"
+                  asp-controller="Product"
+                  method="get"
+                  class="d-flex">
+
+                <select name="CategoryName"
+                        class="form-select me-2">
+
+                    <option value="">All Categories</option>
+
+                    @foreach (var item in ViewBag.Categories)
+                    {
+                        <option value="@item.Name">@item.Name</option>
+                    }
+
+
+                </select>
+
+
+                <button type="submit"
+                        class="btn btn-success">
+                    Filter
+                </button>
+
+            </form>
+        </div>
+
     </div>
-    </div>
-   
+
     <div class="row">
 
         @foreach (var item in Model)
         {
-            <div class="col-md-2 mb-2">
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
 
-                <div class="card shadow h-20">
+                <div class="card shadow-sm h-100">
 
                     <img src="@item.ImageUrl"
-                         class="card-img-top"
-                         style="height:150px; object-fit:contain;" />
+                         class="card-img-top p-3"
+                         style="height:220px; object-fit:contain;" />
 
                     <div class="card-body">
 
-                        <h4 class="card-title">@item.Name</h4>
+                        <h5 class="card-title fw-bold">
+                            @item.Name
+                        </h5>
 
-                        <p><strong>Brand:</strong> @item.Brand</p>
+                        <p class="mb-1">
+                            <strong>Category:</strong>
+                            @item.Category.Name
+                        </p>
 
-                        <p><strong>Category:</strong> @item.Category.Name</p>
+                        <p class="mb-1">
+                            <strong>Brand:</strong>
+                            @item.Brand.BrandName
+                        </p>
 
-                        <p><strong>Price:</strong> ₹@item.Price.ToString("N2")</p>
+                        <p class="text-success fw-bold fs-5">
+                            ₹@item.Price.ToString("N2")
+                        </p>
 
-                        <p><strong>Description:</strong></p>
-                        <p>@item.Description</p>
+                      
 
                     </div>
 
-
-                    <div class="card-footer">
+                    <div class="card-footer bg-white border-0">
 
                         <div class="d-grid gap-2">
 
                             <a asp-action="ProductDetails"
                                asp-route-id="@item.Id"
                                class="btn btn-primary">
-                               ProductDetails 
+                                View Details
                             </a>
 
-                            <a asp-action="UpdateProduct"
-                               asp-route-id="@item.Id"
-                               class="btn btn-warning">
-                                Edit
-                            </a>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <a asp-action="UpdateProduct"
+                                   asp-route-id="@item.Id"
+                                   class="btn btn-warning">
+                                    Edit
+                                </a>
 
-                            <a asp-action="DeleteProduct"
-                               asp-route-id="@item.Id"
-                               class="btn btn-danger">
-                                Delete
-                            </a>
+                                <a asp-action="DeleteProduct"
+                                   asp-route-id="@item.Id"
+                                   class="btn btn-danger">
+                                    Delete
+                                </a>
+                            }
 
                         </div>
 
@@ -95,6 +136,5 @@
         }
 
     </div>
-
 
 </div>

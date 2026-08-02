@@ -2,15 +2,15 @@ using MVCDotnetCore.Data;
 using Microsoft.EntityFrameworkCore;
 using MVCDotnetCore.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using QuestPDF.Infrastructure;
 namespace MVCDotnetCore
 {
     public class Program
     {
         public static void Main(string[] args)
-        {
+         {
             var builder = WebApplication.CreateBuilder(args);
-
-            // Add services to the container.
+            QuestPDF.Settings.License = LicenseType.Community;
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<AppDbContext>
                 (options => options.UseSqlServer
@@ -25,7 +25,11 @@ namespace MVCDotnetCore
             builder.Services.AddScoped<ICartService,CartService>();
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<ICustomerAddressService, CustomerAddressService>();
-
+            builder.Services.AddScoped<IBrandService, BrandService>();
+            builder.Services.AddScoped<IAdminService, AdminService>();
+            builder.Services.
+                AddScoped<IEmailService, EmailService>();
+            builder.Services.AddScoped<PDFService>();
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                  .AddCookie(options =>
               {
@@ -37,6 +41,7 @@ namespace MVCDotnetCore
 
 
             var app = builder.Build();
+
            
 
             // Configure the HTTP request pipeline.

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MVCDotnetCore.Models;
 using MVCDotnetCore.Services;
 using System.Security.Claims;
@@ -13,48 +14,51 @@ namespace MVCDotnetCore.Controllers
         {
             CustomerService = _CustomerService;
         }
+        [Authorize(Roles = "Customer")]
+
         public async Task<IActionResult> Index()
         {
             int userId = int.Parse(
             User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+           
+                var customer = await CustomerService.GetCustomerById(userId);
 
-           var customer=  await CustomerService.GetCustomerById(userId);
-            if (customer == null)
-            {
-                return Content("Customer not found");
-            }
+                return View(customer);
+            
+           
 
-
-            return View(customer);
         }
+        [Authorize(Roles = "Customer")]
+
         public IActionResult AddProfile()
         {
             return View();
         }
+        [Authorize(Roles = "Customer")]
+
         [HttpPost]
         public async Task<IActionResult> AddProfile(Customer customer)
         {
-            if (!ModelState.IsValid)
-            {
-                foreach (var error in ModelState)
-                {
-                    Console.WriteLine(error.Key);
-
-                    foreach (var e in error.Value.Errors)
-                    {
-                        Console.WriteLine(e.ErrorMessage);
-                    }
-                }
-            }
+            
             int userId = int.Parse(
             User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-            if(ModelState.IsValid)
+            try
             {
-               await CustomerService.AddCustomer(customer,userId);
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    await CustomerService.AddCustomer(customer, userId);
+                    return RedirectToAction("Index");
+                }
+                return View();
             }
-            return View();
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View();
+            }
         }
+        [Authorize(Roles = "Customer")]
+
         public async Task<IActionResult> UpdateProfile()
         {
             int userId = int.Parse(
@@ -65,20 +69,29 @@ namespace MVCDotnetCore.Controllers
             {
                 return Content("Customer not found");
             }
-
             return  View(customer);
         }
+        [Authorize(Roles = "Customer")]
+
         [HttpPost]
         public async Task<IActionResult> UpdateProfile(Customer customer)
         {
             int userId = int.Parse(
            User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-           if(ModelState.IsValid)
+            try
             {
-                await CustomerService.UpdateCustomer(customer, userId);
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    await CustomerService.UpdateCustomer(customer, userId);
+                    return RedirectToAction("Index");
+                }
+                return View();
             }
-            return View();
+            catch(Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View();
+            }
         }
 
     }

@@ -8,7 +8,8 @@
     <div class="card-header text-center">UpdateProduct</div>
     <div class="card-body">
         <form asp-action="UpdateProduct" asp-controller="Product" method="post"
-        asp-route-id=@Model.Id>
+                          asp-route-id=@Model.Id enctype="multipart/form-data">
+                        
             <div class="mb-3">
         <label  asp-for="Name" class="form-label" >Name</label>
          <input  asp-for="Name" class="form-control" />
@@ -28,17 +29,12 @@
                             <label asp-for="stock" class="form-label">Stock</label>
                             <input asp-for="stock" class="form-control" />
                     </div>
-                                <div class="mb-3">
 
-                            <label asp-for="Brand" class="form-label">Brand</label>
-                            <input asp-for="Brand" class="form-control" />
-                </div>
-                <div class="mb-3">
-
-                    <label asp-for="ImageUrl" class="form-label">ImageUrl</label>
-                    <input asp-for="ImageUrl" class="form-control" />
-                </div>
-                                    <div class="mb-3">
+                        <div class="mb-3">
+                            <label asp-for="ImageFile" class="form-label"></label>
+                            <input asp-for="ImageFile" type="file" class="form-control" />
+                        </div>
+                        <div class="mb-3">
 
                             <label asp-for="CategoryId" class="form-label">CategoryId</label>
 
@@ -47,7 +43,17 @@
                                     class="form-select">
                                 <option value="">Select Category</option>
                             </select>
-                    </div>
+                        </div>
+                        <div class="mb-3">
+
+                            <label asp-for="BrandId" class="form-label">BrandId</label>
+
+                            <select asp-for="BrandId"
+                                    asp-items="@(new SelectList(ViewBag.Brands, "Id", "BrandName"))"
+                                    class="form-select">
+                                <option value="">Select Category</option>
+                            </select>
+                        </div>
                         <div class="mb-3">
 
                             <label asp-for="IsAcitve" class="form-check-label">IsActive</label>

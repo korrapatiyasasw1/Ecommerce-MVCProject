@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MVCDotnetCore.Models;
 using MVCDotnetCore.Services;
 using System.Security.Claims;
@@ -13,6 +14,8 @@ namespace MVCDotnetCore.Controllers
         {
             CustomerAddressService = _CustomerAddressService;
         }
+        [Authorize(Roles = "Customer")]
+
         public IActionResult Index()
         {
             int userId = int.Parse(
@@ -20,6 +23,8 @@ namespace MVCDotnetCore.Controllers
 
             return View();
         }
+        [Authorize(Roles = "Customer")]
+
         [HttpGet]
         public async Task<IActionResult> GetCustomerAddressById()
         {
@@ -33,12 +38,16 @@ namespace MVCDotnetCore.Controllers
             return View();
 
         }
+        [Authorize(Roles = "Customer")]
+
 
         [HttpGet]
         public IActionResult AddCustomerAddress()
         {
             return View();
         }
+        [Authorize(Roles = "Customer")]
+
         [HttpPost]
         public async Task<IActionResult> AddCustomerAddress(CustomerAddress customerAddress)
         {

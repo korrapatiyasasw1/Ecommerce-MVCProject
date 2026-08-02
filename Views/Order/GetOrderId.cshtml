@@ -1,0 +1,46 @@
+﻿@model MVCDotnetCore.Models.Order
+
+<h2>Order Details</h2>
+
+<p><strong>Order ID:</strong> @Model.Id</p>
+<p><strong>Order Number:</strong> @Model.OrderNumber</p>
+<p><strong>Order Date:</strong> @Model.OrderDate.ToString("dd-MM-yyyy")</p>
+<p><strong>Total Price:</strong> @Model.TotalPrice</p>
+
+<h3>Order Items</h3>
+
+@if (Model.OrderItems != null && Model.OrderItems.Any())
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ProductName</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderItems)
+            {
+                <tr>
+                    <td>@item.Product.Name</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.UnitPrice</td>
+                    <td>@(item.Quantity * item.UnitPrice)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="text-end">
+    <h4>Total Amount: ₹@Model.TotalPrice.ToString("N2")</h4>
+</div>
+    <form asp-action="GenerateInvoicePdf" asp-controller="Order" method="get">
+    <input type ="hidden" name="orderId" value="@Model.Id"/>
+    <button type="submit">InvoicePDF</button>
+</form>
+}
+else
+{
+    <h4>No items found</h4>
+}

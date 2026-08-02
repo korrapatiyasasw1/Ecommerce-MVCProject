@@ -9,6 +9,7 @@ using MVCDotnetCore.Models;
 using Microsoft.AspNetCore.Http;
 using System.Reflection.Metadata.Ecma335;
 using System.Runtime;
+using System.Diagnostics;
 
 namespace MVCDotnetCore.Services
 {
@@ -24,7 +25,9 @@ namespace MVCDotnetCore.Services
         }
         public async Task<List<Product>> GetAllProducts()
         {
-            return await  _context.Products.Include(c=>c.Category).ToListAsync();
+            return await  _context.Products.
+                 Include(c=>c.Category).Include(x=>x.Brand)
+                .ToListAsync();
         }
 
 
@@ -52,25 +55,27 @@ namespace MVCDotnetCore.Services
 
                 product.ImageUrl = "/images/" + fileName;
             }
+
             _context.Products.Add(product);
-            _context.SaveChanges();
+
+            await _context.SaveChangesAsync();
         }
         public async Task<Product> GetProductById(int id)
         {
-            var product = await _context.Products.FirstOrDefaultAsync(c => c.Id == id);
+            var product = await _context.Products.Include(x=>x.Category).
+                Include(x=>x.Brand).
+                FirstOrDefaultAsync(c => c.Id == id);
             if(product == null)
             {
                 throw new Exception("product is not null");
             }
             return product;
-  
         }
         public async Task UpdateProduct(Product product)
         {
             var prod = await _context.Products.
                 FirstOrDefaultAsync(c => c.Id == product.Id);
-            System.Diagnostics.Debug.WriteLine(
-    $"Id={product.Id}, Name={product.Name}, Price={product.Price}");
+
             if (prod==null)
             {
                 throw new Exception("product not there");
@@ -79,10 +84,30 @@ namespace MVCDotnetCore.Services
             prod.Description = product.Description;
             prod.Price = product.Price;
             prod.stock = product.stock;
-            prod.Brand = product.Brand;
-            prod.ImageUrl = product.ImageUrl;
             prod.CategoryId = product.CategoryId;
+            prod.BrandId = product.BrandId;
             prod.IsAcitve = product.IsAcitve;
+            if (product.ImageFile != null)
+            {
+                string folder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+
+                if (!Directory.Exists(folder))
+                {
+                    Directory.CreateDirectory(folder);
+                }
+
+                string fileName = Guid.NewGuid().ToString() +
+                                  Path.GetExtension(product.ImageFile.FileName);
+
+                string filePath = Path.Combine(folder, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await product.ImageFile.CopyToAsync(stream);
+                }
+
+                prod.ImageUrl = "/images/" + fileName;
+            }
             await _context.SaveChangesAsync();
         }
 
@@ -97,21 +122,44 @@ namespace MVCDotnetCore.Services
         {
             if (ProductName == null)
             {
-                return await _context.Products.Include(X => X.Category).ToListAsync();
+                return await _context.Products.
+                    Include(X => X.Category).
+                    Include(x => x.Brand).
+                    ToListAsync();
+                    
             }
             else
             {
-                return await _context.Products.Include(x => x.Category).
-                    Where(x => x.Name.Contains(ProductName)
-                || x.Name.StartsWith(ProductName)
-                ).ToListAsync();
-            }                                                                  
+                var product=  await _context.Products.
+                    Include(x => x.Category).
+                    Include(x=>x.Brand).
+                    Where(x=>x.Name.Contains(ProductName))
+                    .ToListAsync();
+                
+                return product;    
+            } 
+         
         }
        public async  Task<List<Product>> SearchByCategoryName(string CategoryName)
         {
-            var product = await _context.Products.Include(x => x.Category)
-                         .Where(x => x.Category.Name.Trim() == CategoryName.Trim()).ToListAsync();
-            return product;
+            if (CategoryName == null)
+            {
+                return await
+                    _context.Products
+                    .Include(x => x.Category)
+                    .Include(x => x.Brand)
+                    .ToListAsync();
+            }
+           
+                var product = await
+                    _context.Products.
+                    Include(x => x.Category)
+                    .Include(x=>x.Brand)
+                   .Where(x => x.Category.Name.Trim() == CategoryName.Trim()).
+                     ToListAsync();
+
+                return product;
+            
         }
 
     }

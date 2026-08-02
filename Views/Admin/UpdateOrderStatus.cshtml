@@ -1,0 +1,9 @@
+﻿@model Order
+<h1>OrderStatus:@Model.OrderStatus</h1>
+
+<form asp-action="Orderstatus" asp-controller="Admin" 
+method="post">
+<input type="hidden" asp-for="Id"/>
+    <input type="text" asp-for="OrderStatus" />
+    <button type="submit">Submit</button>
+</form>

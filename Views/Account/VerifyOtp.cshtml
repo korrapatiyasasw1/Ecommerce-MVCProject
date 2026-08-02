@@ -28,12 +28,14 @@
                             <input asp-for="OtpCode" class="form-control" placeholder="Enter OTP" />
                             <span asp-validation-for="OtpCode" class="text-danger"></span>
                         </div>
+                        <div asp-validation-summary="All" class="text-danger mb-3"></div>
 
                         <div class="d-grid">
                             <button type="submit" class="btn btn-primary">
                                 Verify OTP
                             </button>
                         </div>
+
 
                     </form>
 

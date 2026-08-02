@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MVCDotnetCore.Data;
 using MVCDotnetCore.Models;
 
@@ -11,15 +12,21 @@ namespace MVCDotnetCore.Controllers
         {
             _db = db;
         }
+        [Authorize(Roles = "Customer")]
+
         public IActionResult Index()
         {
             List<Category> Category = _db.Categories.ToList();
             return View(Category);
         }
+        [Authorize(Roles = "Customer")]
+
         public IActionResult Create()
         {
             return View();
         }
+        [Authorize(Roles = "Customer")]
+
         [HttpPost]
         public IActionResult Create(Category obj)
         {
@@ -34,6 +41,8 @@ namespace MVCDotnetCore.Controllers
 
 
         }
+        [Authorize(Roles = "Customer")]
+
         public IActionResult Update(int? id)
         {
             if(id==null || id==0)
@@ -46,6 +55,8 @@ namespace MVCDotnetCore.Controllers
                     }
             return View(category);
         }
+        [Authorize(Roles = "Customer")]
+
         [HttpPost]
         public IActionResult Update(Category obj)
         {
@@ -61,11 +72,15 @@ namespace MVCDotnetCore.Controllers
             return View(obj);
 
         }
+        [Authorize(Roles = "Customer")]
+
         public IActionResult Delete(int id)
         {
             var category = _db.Categories.Find(id);
             return View(category);
         }
+        [Authorize(Roles = "Customer")]
+
         [HttpPost ]
         public IActionResult Delete(Category category)
         {

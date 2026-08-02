@@ -1,0 +1,18 @@
+﻿@model AdminDTO;
+ @if (User.IsInRole("Admin"))
+        {
+<h1>TotalProduct:@Model.TotalProducts</h1>
+<h1>TotalCustomer:@Model.TotalCustomers</h1>
+<h1>TotalRevunue:@Model.TotalRevunue</h1>
+<h1>TotalOrders:@Model.TotalOrders</h1>
+    <a asp-action="GetAllOrders" asp-controller="Admin">
+        <button type="submit">
+            GetAllOrders
+        </button>
+</a>
+    <a asp-action="GetAllProducts" asp-controller="Admin">
+        <button type="submit">
+            GetAllProducts
+        </button>
+    </a>
+ }

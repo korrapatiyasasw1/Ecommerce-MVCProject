@@ -30,8 +30,15 @@ namespace MVCDotnetCore.Services
         }
         public async Task AddCustomer(Customer customer ,int userId)
         {
+            var cus = _context.Customers.FirstOrDefault(x => x.UserId == userId);
+            if(cus !=null)
+            {
+                throw new Exception("Please Update the profile You already added the profile");
+            }
+
             customer.UserId = userId;
-          _context.Customers.Add(customer);
+
+           _context.Customers.Add(customer);
             await _context.SaveChangesAsync();
         }
         public async Task UpdateCustomer(Customer customer, int userId)
@@ -40,7 +47,6 @@ namespace MVCDotnetCore.Services
             if (cu == null)
             {
                 throw new Exception("please enter your details");
-
             }
             cu.PhoneNumber = customer.PhoneNumber;
             cu.FirstName = customer.FirstName;

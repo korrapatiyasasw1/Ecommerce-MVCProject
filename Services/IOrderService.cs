@@ -1,15 +1,19 @@
-﻿using MVCDotnetCore.Models;
+﻿using MailKit.Search;
+using MVCDotnetCore.Models;
 
 namespace MVCDotnetCore.Services
 {
     public interface IOrderService
     {
-        Task CreateOrder(int userId, Order order);
+        Task<Order> CreateOrder(int userId, Order order);
 
-       // Task<List<Order>> GetOrders(int userId);
+       Task<List<Order>> GetOrders(int userId);
 
-        // Task<Order> GetOrderById(int orderId);
-
+        Task<Order> GetOrderId(int userId,int orderid);
+        Task<List<Order>> GetByDate(int userId,DateOnly? orderdate);
+        Task<Order> GetOrderIdWithoutUser(int orderId);
+            
         //Task CancelOrder(int orderId);
+        Task<List<OrderItem>> GetOrderItemByOrderId(int id);
     }
 }

@@ -1,12 +1,31 @@
 ﻿@model Order
-<form asp-action="CreateOrder" asp-controller="Order" method="post">
-    <label asp-for="CustomerAddressId" class-label="from-label">
-    </label>
-    <select asp-for="CustomerAddressId"
-            asp-items="@(new SelectList( ViewBag.CustomerAddress ,"Id","Display"))"
-      class="form-select"      >
-    <option value="">Select CustomerAddress</option>
-    </select>
 
-    <button type="submit">PlaceOrder</button>
-</form>
+
+
+    <form asp-action="CreateOrder" asp-controller="Order" method="post">
+
+        <div class="mb-3">
+
+            <label asp-for="CustomerAddressId" class="form-label">
+                Select Address
+            </label>
+
+            <select asp-for="CustomerAddressId"
+            asp-items="@(new SelectList(ViewBag.CustomerAddress, "Value", "Display"))"
+            class="form-select">
+
+                <option value="">-- Select Address --</option>
+
+            </select>
+
+            <span asp-validation-for="CustomerAddressId"
+            class="text-danger"></span>
+
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            Place Order
+        </button>
+
+    </form>
+}
