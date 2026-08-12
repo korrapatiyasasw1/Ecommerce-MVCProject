@@ -17,14 +17,12 @@ namespace MVCDotnetCore.Services
         {
             Console.WriteLine($"{userid}");
 
-            var customer = _context.Customers.FirstOrDefault(x => x.UserId == userid);
-            var customer1 = _context.Customers.ToList();
+            var customer = _context.Customers.
+                FirstOrDefault(x => x.UserId == userid);
 
-            foreach(var i in customer1)
-            {
-                Console.WriteLine($"{i.Id} and {i.UserId}");
-            }
-           
+
+
+
             return customer;
                 
         }

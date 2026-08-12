@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MVCDotnetCore.Data;
+using MVCDotnetCore.DTOs;
 using MVCDotnetCore.Models;
 
 namespace MVCDotnetCore.Services
@@ -9,10 +10,14 @@ namespace MVCDotnetCore.Services
     {
         private readonly AppDbContext _context;
         private readonly IEmailService _emailService;
-        public AdminService(AppDbContext context, IEmailService emailService)
+        public event OrderHandler? Adminstatus;
+        private readonly PDFService _pdfService;
+        public AdminService(AppDbContext context, IEmailService emailService
+            ,PDFService pdfService)
         {
             _context = context;
             _emailService = emailService;
+            _pdfService = pdfService;
         }
         public async Task<AdminDTO> AdminView()
         {
@@ -46,20 +51,28 @@ namespace MVCDotnetCore.Services
         }
         public async Task Orderstatus(Order order)
         {
-            var orderstatus = await _context.Order.
-                Include(x=>x.Customer).ThenInclude(x=>x.User).
+            var orderstatus = await _context.Order.Include(x=>x.OrderItems).
+                ThenInclude(x=>x.Product).
+                Include(x=>x.Customer).
+                ThenInclude(x=>x.User).
+                Include(x => x.CustomerAddress).
                 FirstOrDefaultAsync(x => x.Id == order.Id);
-            orderstatus.OrderStatus = order.OrderStatus;
-            await _context.SaveChangesAsync();
-            if (orderstatus.OrderStatus == "Shipped")
+
+            if (order.OrderStatus == "Shipped")
             {
                 await _emailService.SendOrderStatusEmail(
-                           orderstatus.Customer.User.Email,
+                           orderstatus.Customer.Email,
                            orderstatus.Customer.LastName,
                        orderstatus.OrderNumber,
                        orderstatus.OrderStatus);
             }
-
+            if(order.OrderStatus == "Delivered")
+            {
+                orderstatus.OrderStatus = "Delivered";
+                await _context.SaveChangesAsync();
+                byte[] sendpdf = _pdfService.GeneratepdfInvoice(orderstatus);
+               await  _emailService.SendOrderInvoiceMail(orderstatus, sendpdf);
+            }
         }
         public async Task<List<Product>> GetAllProducts()
         {

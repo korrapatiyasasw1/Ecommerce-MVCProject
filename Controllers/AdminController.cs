@@ -21,7 +21,7 @@ namespace MVCDotnetCore.Controllers
             OrderService = orderService;
             this.pdfService = pdfService;
             _emailService = emailService;
-
+          
         }
         public IActionResult Index()
         {
@@ -69,7 +69,6 @@ namespace MVCDotnetCore.Controllers
         {
             var orders = await OrderService.GetOrderIdWithoutUser(orderId);
             byte[] pdfBytes =  pdfService.GeneratepdfInvoice(orders);
-            var mail = _emailService.SendOrderInvoiceMail(orders, pdfBytes);
             return RedirectToAction("GetAllOrders", "Admin");
         }
 

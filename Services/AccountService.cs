@@ -57,7 +57,6 @@ namespace MVCDotnetCore.Services
                 message.Subject = "Your Otp";
                 message.Body = otp;
                 message.IsBodyHtml = true;
-
                 using var smtp = new SmtpClient(_settings.Host, _settings.Port);
                 smtp.Credentials = new NetworkCredential(_settings.Email, _settings.Password);
                 smtp.EnableSsl = true;
@@ -69,7 +68,7 @@ namespace MVCDotnetCore.Services
                     OtpCode = otp,
                     Email = User.Email,
                     CreatedDate = DateTime.UtcNow,
-                    ExpiryTime = DateTime.UtcNow.AddMinutes(2),
+                    ExpiryTime = DateTime.UtcNow.AddMinutes(5),
                     IsUsed = false
                 });
                 await _context.SaveChangesAsync();
@@ -113,7 +112,6 @@ namespace MVCDotnetCore.Services
                 await sm.SendMailAsync(mess);
 
             }
-
         }
         public async Task VerifyOtp(VerifyOtp OTP)
         {

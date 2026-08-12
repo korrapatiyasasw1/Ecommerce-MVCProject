@@ -20,23 +20,26 @@
 
             <p><strong>Address :</strong> @Model.Address</p>
 
+
         </div>
     }
 
 </div>
 <div>
-   
+    
+   @if(Model != null)
+   {
     <a asp-controller="Customer"
        asp-action="UpdateProfile"
        class="btn btn-primary mb-3">
-        UpdateCustomer
+        UpdateProfile
     </a>
     <a asp-controller ="CustomerAddress"
        asp-action="AddCustomerAddress"
     class="btn btn-primary mb-3">
     AddCutsomerAddress
-
     </a>
+   }
   
 
 </div>

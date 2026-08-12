@@ -1,4 +1,5 @@
-﻿@model Product
+﻿@using MVCDotnetCore.DTOs
+@model  ProductDetailsDTo
 @if (ViewBag.Error != null)
 {
     <div class="alert alert-danger">
@@ -37,17 +38,17 @@
 
                             <p>
                                 <strong>Category:</strong>
-                                @Model.Category.Name
+                                @Model.CategoryName
                             </p>
 
                             <p>
                                 <strong>Brand:</strong>
-                                @Model.Brand.BrandName
+                                @Model.BrandName
                             </p>
 
                             <p>
                                 <strong>Brand Description:</strong><br />
-                                @Model.Brand.Description
+                                @Model.BrandDescription
                             </p>
 
                             <p>

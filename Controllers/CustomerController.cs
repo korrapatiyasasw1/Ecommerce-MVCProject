@@ -22,6 +22,10 @@ namespace MVCDotnetCore.Controllers
             User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
            
                 var customer = await CustomerService.GetCustomerById(userId);
+            if(customer == null)
+            {
+                return RedirectToAction("AddProfile");
+            }
 
                 return View(customer);
             

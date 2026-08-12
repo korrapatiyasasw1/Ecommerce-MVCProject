@@ -1,5 +1,5 @@
-﻿@model List<Product>
-
+﻿@using MVCDotnetCore.DTOs
+@model List<ProductDto>
 <div class="container mt-4">
 
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -85,12 +85,12 @@
 
                         <p class="mb-1">
                             <strong>Category:</strong>
-                            @item.Category.Name
+                            @item.CategoryName
                         </p>
 
                         <p class="mb-1">
                             <strong>Brand:</strong>
-                            @item.Brand.BrandName
+                            @item.BrandName
                         </p>
 
                         <p class="text-success fw-bold fs-5">

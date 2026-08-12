@@ -8,6 +8,8 @@ namespace MVCDotnetCore.Services
                                       string customerName,
                                       string orderNumber,
                                       string status);
-        Task SendOrderInvoiceMail(Order orders, byte[] pdfBytes);
+        Task SendOrderInvoiceMail(Order orders, byte[] pdf);
+        Task SendOrderConfirmationEmail(Order order);
+        Task NewOrderhasbeenCreated(Order order);
     }
 }

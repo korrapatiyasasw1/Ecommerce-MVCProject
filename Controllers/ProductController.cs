@@ -76,7 +76,7 @@ namespace MVCDotnetCore.Controllers
         [HttpGet]
         public async Task<IActionResult> UpdateProduct(int id)
         {
-            var product = await ProductService.GetProductById(id);
+            var product = await ProductService.GetProductByIdForEdit( id);
 
             if(product == null)
             {

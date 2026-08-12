@@ -13,32 +13,62 @@ namespace MVCDotnetCore.Services
 {
     public class PDFService
     {
-        private readonly IOrderService orderService;
-        public  byte[] GeneratepdfInvoice(Order order)
+        public byte[] GeneratepdfInvoice(Order order)
         {
             var pdf = Document.Create(x =>
             {
-                x.Page(x =>
+                x.Page(page =>
                 {
-                x.Content().Column(c=>
-                {
-                    c.Item().Text($"{order.OrderNumber}");
-                    c.Item().Text($"{order.OrderDate}");
-                    c.Item().Text($"{order.Customer.Email}");
-                    var orderdate = DateTime.Now;
-                    c.Item().Text($"orderdate");
-                });
-                });
-                x.Page(x =>
-                {
-                    x.Content().Text("Hello");
-                });
-            } );
-           
-                return pdf.GeneratePdf();
+                    page.Content().Column(c =>
+                    {
+                        c.Item().Text($"Order Number: {order.OrderNumber}");
+                        c.Item().Text($"Order Date: {order.OrderDate:dd-MM-yyyy}");
+                        c.Item().Text($"Customer Email: {order.Customer.User.Email}");
 
+                        c.Item().PaddingVertical(10);
+
+                        c.Item().Table(table =>
+                        {
+                            table.ColumnsDefinition(columns =>
+                            {
+                                columns.RelativeColumn(3); // Product
+                                columns.RelativeColumn(2); // Unit Price
+                                columns.RelativeColumn(1); // Quantity
+                                columns.RelativeColumn(2); // Total
+                            });
+
+                            table.Header(header =>
+                            {
+                                header.Cell().Text("Product");
+                                header.Cell().Text("Unit Price");
+                                header.Cell().Text("Quantity");
+                                header.Cell().Text("Total");
+                            });
+
+                            foreach (var item in order.OrderItems)
+                            {
+                                table.Cell().Text(item.Product.Name);
+                                table.Cell().Text(item.UnitPrice.ToString("C"));
+                                table.Cell().Text(item.Quantity.ToString());
+                                table.Cell().Text(
+                                    (item.UnitPrice * item.Quantity).ToString("C")
+                                );
+                            }
+
+                            table.Cell().ColumnSpan(3).Text("Grand Total");
+                            table.Cell().Text(
+                                order.OrderItems
+                                    .Sum(x => x.UnitPrice * x.Quantity)
+                                    .ToString("C")
+                            );
+                        });
+                    });
+                });
+            });
+
+            return pdf.GeneratePdf();
         }
-      
+
 
     }
 }

@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using MVCDotnetCore.Data;
 using MVCDotnetCore.Models;
-
+using MVCDotnetCore.DTOs;
 using Microsoft.AspNetCore.Http;
 using System.Reflection.Metadata.Ecma335;
 using System.Runtime;
@@ -17,17 +17,28 @@ namespace MVCDotnetCore.Services
     {
         private readonly AppDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IGenericRepository<Product> _repository;
+
         public ProductService(AppDbContext context,
-                         IWebHostEnvironment webHostEnvironment)
+                         IWebHostEnvironment webHostEnvironment, 
+                         IGenericRepository<Product> repository)
+
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
         }
-        public async Task<List<Product>> GetAllProducts()
+        public async Task<List<ProductDto>> GetAllProducts()
         {
-            return await  _context.Products.
-                 Include(c=>c.Category).Include(x=>x.Brand)
-                .ToListAsync();
+           return await _context.Products.Include(x => x.Category).Include(x => x.Brand)
+                      .Select(X => new ProductDto
+                      {
+                          Id = X.Id,
+                          Name = X.Name,
+                          Price = X.Price,
+                          ImageUrl = X.ImageUrl,
+                          CategoryName = X.Category.Name,
+                          BrandName = X.Brand.BrandName
+                      }).ToListAsync();
         }
 
 
@@ -60,12 +71,31 @@ namespace MVCDotnetCore.Services
 
             await _context.SaveChangesAsync();
         }
-        public async Task<Product> GetProductById(int id)
+        public async Task<Product> GetProductByIdForEdit(int id)
         {
-            var product = await _context.Products.Include(x=>x.Category).
-                Include(x=>x.Brand).
-                FirstOrDefaultAsync(c => c.Id == id);
-            if(product == null)
+            var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == id);
+            if (product == null)
+            {
+                throw new Exception("product is not null");
+            }
+            return product;
+        }
+        public async Task<ProductDetailsDTo> GetProductById(int id)
+        {
+            var product = await _context.Products.Include(x => x.Category).Include(x => x.Brand)
+                      .Select(X => new ProductDetailsDTo
+                      {
+                          Id = X.Id,
+                          Name = X.Name,
+                          Price = X.Price,
+                          ImageUrl = X.ImageUrl,
+                          CategoryName = X.Category.Name,
+                          BrandName = X.Brand.BrandName,
+                          Description = X.Description,
+                          BrandDescription = X.Brand.Description
+
+                      }).FirstOrDefaultAsync(x => x.Id == id);
+            if (product == null)
             {
                 throw new Exception("product is not null");
             }
@@ -118,48 +148,72 @@ namespace MVCDotnetCore.Services
             await _context.SaveChangesAsync();  
 
         }
-        public async Task<List<Product>> Search(string ProductName)
+        public async Task<List<ProductDto>> Search(string ProductName)
         {
             if (ProductName == null)
             {
-                return await _context.Products.
-                    Include(X => X.Category).
-                    Include(x => x.Brand).
-                    ToListAsync();
-                    
+
+                return await _context.Products.Include(x => x.Category).Include(x => x.Brand)
+                  .Select(X => new ProductDto
+                  {
+                      Id = X.Id,
+                      Name = X.Name,
+                      Price = X.Price,
+                      ImageUrl = X.ImageUrl,
+                      CategoryName = X.Category.Name,
+                      BrandName = X.Brand.BrandName
+                  }).ToListAsync();
             }
             else
             {
-                var product=  await _context.Products.
+                return await _context.Products.
                     Include(x => x.Category).
-                    Include(x=>x.Brand).
-                    Where(x=>x.Name.Contains(ProductName))
-                    .ToListAsync();
-                
-                return product;    
+                    Include(x => x.Brand)
+                    .Select(X => new ProductDto
+             {
+                 Id = X.Id,
+                 Name = X.Name,
+                 Price = X.Price,
+                 ImageUrl = X.ImageUrl,
+                 CategoryName = X.Category.Name,
+                 BrandName = X.Brand.BrandName
+             }).Where(x => x.Name.Contains(ProductName)).
+             ToListAsync();
             } 
          
         }
-       public async  Task<List<Product>> SearchByCategoryName(string CategoryName)
+       public async  Task<List<ProductDto>> SearchByCategoryName(string CategoryName)
         {
             if (CategoryName == null)
             {
-                return await
-                    _context.Products
-                    .Include(x => x.Category)
-                    .Include(x => x.Brand)
-                    .ToListAsync();
+                return await _context.Products.
+                    Include(x => x.Category).
+                    Include(x => x.Brand)
+                  .Select(X => new ProductDto
+                  {
+                      Id = X.Id,
+                      Name = X.Name,
+                      Price = X.Price,
+                      ImageUrl = X.ImageUrl,
+                      CategoryName = X.Category.Name,
+                      BrandName = X.Brand.BrandName
+                  }).ToListAsync();
             }
-           
-                var product = await
-                    _context.Products.
-                    Include(x => x.Category)
-                    .Include(x=>x.Brand)
-                   .Where(x => x.Category.Name.Trim() == CategoryName.Trim()).
-                     ToListAsync();
+           return await _context.Products.
+                Include(x => x.Category).
+                Include(x => x.Brand)
+             .Select(X => new ProductDto
+             {
+                 Id = X.Id,
+                 Name = X.Name,
+                 Price = X.Price,
+                 ImageUrl = X.ImageUrl,
+                 CategoryName = X.Category.Name,
+                 BrandName = X.Brand.BrandName
+             }).Where(x => x.CategoryName
+             .Contains(CategoryName)).
+             ToListAsync();
 
-                return product;
-            
         }
 
     }

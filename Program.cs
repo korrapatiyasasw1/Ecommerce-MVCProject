@@ -14,22 +14,28 @@ namespace MVCDotnetCore
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<AppDbContext>
                 (options => options.UseSqlServer
-                (builder.Configuration.GetConnectionString("DefaultConnection")));
+           (builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.Configure<EmailSettings>(
-             builder.Configuration.GetSection("EmailSettings"));
-            builder.Services.AddScoped<IAccountService, AccountService>();
-            builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Configuration.GetSection("EmailSettings"));
+            builder.Services.AddScoped<IAccountService,  AccountService>();
+            builder.Services.AddScoped<IProductService,  ProductService>();
             builder.Services.AddScoped<ICustomerService, CustomerService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
-            builder.Services.AddScoped<ICartItemService,CartItemService>();
+            builder.Services.AddScoped<ICartItemService, CartItemService>();
+
             builder.Services.AddScoped<ICartService,CartService>();
-            builder.Services.AddScoped<IOrderService, OrderService>();
-            builder.Services.AddScoped<ICustomerAddressService, CustomerAddressService>();
+            builder.Services.AddScoped<IOrderService,OrderService>();
+            builder.Services.AddScoped<ICustomerAddressService,
+               CustomerAddressService>();
             builder.Services.AddScoped<IBrandService, BrandService>();
             builder.Services.AddScoped<IAdminService, AdminService>();
             builder.Services.
-                AddScoped<IEmailService, EmailService>();
+                AddScoped<IEmailService,EmailService>();
+            builder.Services.AddScoped<IReviewService,
+                ReviewService>();
             builder.Services.AddScoped<PDFService>();
+            builder.Services.AddScoped(typeof(IGenericRepository<>), 
+                typeof(GenericRepository<>));
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                  .AddCookie(options =>
               {

@@ -1,27 +1,34 @@
 ﻿@model Customer
+
 <form asp-action="UpdateProfile" asp-controller="Customer" method="post">
-    <div class="mb-lg-2">
-        <label asp-for="FirstName" class="form-label">FirstName</label>
-        <input asp-for="FirstName" class="frm-control" />
+
+    <div class="mb-3">
+        <label asp-for="FirstName" class="form-label">First Name</label>
+        <input asp-for="FirstName" class="form-control" />
     </div>
-    <div class="mb-lg-2">
-        <label asp-for="LastName" class="from-label">LastName</label>
-        <input asp-for="LastName" class="from-control" />
+
+    <div class="mb-3">
+        <label asp-for="LastName" class="form-label">Last Name</label>
+        <input asp-for="LastName" class="form-control" />
     </div>
-    <div class="mb-lg-2">
-        <label asp-for="Email" class="from-label">Email</label>
-        <input asp-for="Email" class="from-control" />
+
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label">Email</label>
+        <input asp-for="Email" class="form-control" />
     </div>
-    <div class="mb-lg-2">
-        <label asp-for="PhoneNumber" class="from-label">PhoneNumber</label>
-        <input asp-for="PhoneNumber" class="from-control" />
+
+    <div class="mb-3">
+        <label asp-for="PhoneNumber" class="form-label">Phone Number</label>
+        <input asp-for="PhoneNumber" class="form-control" />
     </div>
-    <div class="mb-lg-2">
-        <label asp-for="Address" class="from-label">Address</label>
-        <input asp-for="Address" class="from-control" />
+
+    <div class="mb-3">
+        <label asp-for="Address" class="form-label">Address</label>
+        <input asp-for="Address" class="form-control" />
     </div>
 
     <div asp-validation-summary="All" class="text-danger mb-3"></div>
 
-    <button type="submit" class="btn btn-primary">Edit</button>
+    <button type="submit" class="btn btn-primary mt-2">Save</button>
+
 </form>

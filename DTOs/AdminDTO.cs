@@ -1,4 +1,4 @@
-﻿namespace MVCDotnetCore.Models
+﻿namespace MVCDotnetCore.DTOs
 {
     public class AdminDTO
     {

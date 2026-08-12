@@ -9,8 +9,10 @@
     <h2 class="mb-4">My Orders</h2>
     
     <form asp-action="GetOrderByDate" asp-controller="Order" method="post">
+        <div  class="col d-flex gap-2">
     <input type="date"  name="orderdate" class="form-control"/>
-    <button type ="Submit">Search</button>
+            <button type="Submit" class="btn btn-primary">Search</button>
+        </div>
   </form>
     @if (Model != null && Model.Any())
     {
@@ -51,7 +53,8 @@
                         {
                             <tr> 
 
-                                <td>@item.Product.Name</td>
+                                <td>@item.Product.
+                                    Name</td>
 
                                 <td class="text-center">
                                     @item.UnitPrice.ToString("C")
@@ -62,7 +65,8 @@
                                 </td>
 
                                 <td class="text-end">
-                                    @((item.UnitPrice * item.Quantity).ToString("C"))
+                                    @((item.UnitPrice * 
+                                    item.Quantity).ToString("C"))
                                 </td>
 
                             </tr>
@@ -93,12 +97,14 @@
             </div>
 
         </div>
-    }
+        }
     }
 
     else
     {
-        <h1>Orders are empty</h1>
+        <div class="alert alert-warning mt-3">
+            Orders are empty.
+        </div>
     }
 
     </div>

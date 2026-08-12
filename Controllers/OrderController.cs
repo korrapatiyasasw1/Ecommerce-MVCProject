@@ -12,22 +12,26 @@ namespace MVCDotnetCore.Controllers
         private readonly IOrderService OrderService;
         private readonly ICustomerAddressService CustomerAddressService;
         private readonly PDFService pdfservice;
-       
+        private readonly IEmailService _emailService;
+
         public OrderController(IOrderService _OrderService,
             ICustomerAddressService _CustomerAddressService,
-            PDFService pdfservice)
+            PDFService pdfservice,IEmailService emailService)
         {
             OrderService = _OrderService;
             CustomerAddressService = _CustomerAddressService;
             this.pdfservice = pdfservice;
-
+            _emailService = emailService;
+            OrderService.OrderCreated += _emailService.SendOrderConfirmationEmail;
+            OrderService.OrderCreated += _emailService.NewOrderhasbeenCreated;
         }
+
         [Authorize(Roles = "Customer")]
         [HttpGet]
         public async Task<IActionResult> GenerateInvoicePdf(int orderId)
         {
             int UserId = int.Parse(
-User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
             var order = await OrderService.GetOrderId(UserId, orderId);
 
             byte[] pdf = pdfservice.GeneratepdfInvoice(order) ;
@@ -72,7 +76,7 @@ User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
         public async Task<IActionResult> CreateOrderView()
         {
             int UserId = int.Parse(
- User.FindFirst(ClaimTypes.NameIdentifier)!.Value); 
+                 User.FindFirst(ClaimTypes.NameIdentifier)!.Value); 
             var Address = await CustomerAddressService.GetCustomerAddressById(UserId);
             ViewBag.CustomerAddress = Address.Select(x => new
             {

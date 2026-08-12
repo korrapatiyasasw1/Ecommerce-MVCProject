@@ -118,7 +118,7 @@ namespace MVCDotnetCore.Services
                 && x.CartId == Cart.Id);
    
 
-            cartitem.Quantity =1 + cartitem.Quantity;
+            cartitem.Quantity = 1 + cartitem.Quantity;
 
             await _context.SaveChangesAsync();
             return cartitem;

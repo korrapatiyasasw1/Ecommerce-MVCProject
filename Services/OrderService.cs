@@ -1,19 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using MVCDotnetCore.Data;
 using MVCDotnetCore.Models;
 
 namespace MVCDotnetCore.Services
 {
-    public class OrderService : IOrderService
+    public class OrderService : IOrderService   
     {
         private readonly AppDbContext _context;
-        private readonly PDFService pdfservice;
-
+        public event OrderCreatedHandler? OrderCreated;
         public OrderService(AppDbContext context)
         {
             _context = context;
         }
-        public async Task<List<Order>> GetOrders(int userId)
+       
+       
+    public async Task<List<Order>> GetOrders(int userId)
         {
             var customer = await _context.Customers.
     FirstOrDefaultAsync(x => x.UserId == userId);
@@ -34,6 +36,7 @@ namespace MVCDotnetCore.Services
         }
         public  async  Task<Order> GetOrderId(int userId,int orderid)
         {
+            
             var customer = await _context.Customers.
                            FirstOrDefaultAsync(x => x.UserId == userId);
             if (customer == null)
@@ -63,8 +66,9 @@ namespace MVCDotnetCore.Services
 
         public async Task<Order> CreateOrder(int userId,Order order)
         {
-            using var transaction = await _context.Database.BeginTransactionAsync();
-
+            using var transaction = await _context.
+                Database.
+                BeginTransactionAsync();
             try
             {
                 var customer = await _context.Customers.
@@ -126,20 +130,19 @@ namespace MVCDotnetCore.Services
                 postorder.TotalPrice = totalprice;
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
+               
+                    OrderCreated?.Invoke(postorder);
+                
+
                 return postorder;
             }
-
-
             catch
             {
                 await transaction.RollbackAsync();
                 throw;
-            }
-
-
-
-
+           }
         }
+       
         public async Task<List<Order>> GetByDate(int userId, DateOnly? orderdate)
         {
             if (orderdate == null)

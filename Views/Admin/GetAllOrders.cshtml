@@ -47,12 +47,7 @@
                        class="btn btn-warning btn-sm">
                         Update Status
                     </a>
-                    <form asp-controller="Admin" asp-action="SendPDFToUser" method="post">
-                        <input type="hidden" name="orderId" value="@item.Id" />
-                        <button type="submit" 
-                            class="btn btn-danger btn-sm">
-                            SendPDF</button>
-                    </form>
+                   
                 </td>
             </tr>
         }
