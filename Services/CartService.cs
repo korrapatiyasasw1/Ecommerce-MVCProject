@@ -65,7 +65,7 @@ namespace MVCDotnetCore.Services
                FirstOrDefaultAsync(x => x.UserId == UserId);
             if (customer == null)
             {
-                throw new Exception("before adding the produts please fill the User Profile .");
+                throw new Exception("Before adding the products please fill the User Profile .");
             }
             var CustomerCart = await _context.Cart.Include(x => x.Customer).
                FirstOrDefaultAsync(x => x.Customer.UserId == UserId);

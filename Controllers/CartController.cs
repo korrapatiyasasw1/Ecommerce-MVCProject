@@ -72,7 +72,7 @@ User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
         public async Task<IActionResult> IncreaseQuantity(int itemId)
         {
             int UserId = int.Parse(
-User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+          User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
             try
             {
                 await CartService.AddQuantity(UserId, itemId);

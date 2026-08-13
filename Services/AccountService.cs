@@ -97,7 +97,7 @@ namespace MVCDotnetCore.Services
                         Email = existingUser.Email,
                         OtpCode = otpcode,
                         CreatedDate = DateTime.UtcNow,
-                        ExpiryTime = DateTime.UtcNow.AddMinutes(2),
+                        ExpiryTime = DateTime.UtcNow.AddMinutes(10),
                         IsUsed = false
                     });
                 }
@@ -105,7 +105,7 @@ namespace MVCDotnetCore.Services
                 {
                     existingOtp.OtpCode = otpcode;
                     existingOtp.CreatedDate = DateTime.UtcNow;
-                    existingOtp.ExpiryTime = DateTime.UtcNow.AddMinutes(2);
+                    existingOtp.ExpiryTime = DateTime.UtcNow.AddMinutes(10);
                     existingOtp.IsUsed = false;
                 }
                 await _context.SaveChangesAsync();

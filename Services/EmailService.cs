@@ -79,8 +79,8 @@ namespace MVCDotnetCore.Services
                 $" {order.Customer.Email}");
 
             message.Body = $@"hi 
-        {order.Customer.LastName} 
-            Your order has been created";
+                           {order.Customer.LastName} 
+                           Your order has been created";
             var smtp = new SmtpClient(_settings.Host, _settings.Port)
             {
                 Credentials = new NetworkCredential(_settings.Email,
@@ -97,9 +97,9 @@ namespace MVCDotnetCore.Services
             message.To.Add(new MailAddress(_settings.Email));
             message.Subject = "New Order Created";
             message.Body = $@" 
-                order has been created with order number 
+                               order has been created with order number 
                                {order.OrderNumber} the mail 
-                                     is {order.Customer.Email}";
+                               is {order.Customer.Email}";
 
             var smtp = new SmtpClient(_settings.Host,
                 _settings.Port)
